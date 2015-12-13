@@ -30,19 +30,26 @@ public class BoardState {
     }
 
     public void updateCells(){
-        blocks[3][3].setAlive(true);
-        /*for (int x = 0; x < blocks.length; x++){
+        for (int x = 0; x < blocks.length; x++){
             for (int y = 0; y < blocks[x].length; y++){
                 Cell current = blocks[x][y];
                 int numNeighbors = getNumberOfNeighbors(current);
-                Log.v("NEIGHBORS", Integer.toString(numNeighbors));
                 if(numNeighbors < 2 || numNeighbors > 3){
                     current.setAlive(false);
                 } else if(numNeighbors == 3){
                     current.setAlive(true);
                 }
             }
-        }*/
+        }
+    }
+
+    public void clearCells(){
+        for (int x = 0; x < blocks.length; x++) {
+            for (int y = 0; y < blocks[x].length; y++) {
+                Cell current = blocks[x][y];
+                current.setAlive(false);
+            }
+        }
     }
 
     private int getNumberOfNeighbors(Cell c){
@@ -73,7 +80,7 @@ public class BoardState {
         // Right middle
         checkX = x + 1;
         checkY = y;
-        if(checkX < sizeY){
+        if(checkX < sizeX){
             sumofAliveNeighbors += (blocks[checkX][checkY].isAlive()) ? 1 : 0;
         }
         // Right lower

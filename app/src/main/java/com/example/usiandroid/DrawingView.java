@@ -23,17 +23,32 @@ public class DrawingView extends View {
     private int w, h;
     private float blockWidth, blockHeight;
     private int NUM_BLOCKS_ACROSS = 15, NUM_BLOCKS_TALL = 30;
-    private BoardState board;
+    public BoardState board;
     private Paint paint;
     private GraphicsLoop gThread;
     private LogicLoop lThread;
+    private boolean initial;
 
     public DrawingView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        initial = true;
         paint = new Paint();
         board = new BoardState(NUM_BLOCKS_ACROSS, NUM_BLOCKS_TALL);
         gThread = new GraphicsLoop();
         gThread.start();
+    }
+
+    public void clearBoard(){
+        board.clearCells();
+    }
+
+    public void pauseLogic(){
+        lThread.interrupt();
+    }
+
+    public void startLogic(){
+        lThread = new LogicLoop(board);
+        lThread.start();
     }
 
     @Override
@@ -107,7 +122,7 @@ public class DrawingView extends View {
         }
 
         // Calling invalidate will cause onDraw() to execute
-        invalidate();
+        //invalidate();
         return true;
     }
 
@@ -115,43 +130,37 @@ public class DrawingView extends View {
         private long frameTime;
 
         GraphicsLoop(){
+            frameTime = System.currentTimeMillis();
         }
 
         @Override
         public void run() {
-            long frameTimeDelta = System.currentTimeMillis() - frameTime;
-            if (frameTimeDelta > 16){
-                frameTime = System.currentTimeMillis();
-                invalidate();
+            while(true) {
+                long frameTimeDelta = System.currentTimeMillis() - frameTime;
+                if (frameTimeDelta > 16) {
+                    frameTime = System.currentTimeMillis();
+                    postInvalidate();
+                }
             }
         }
+    }
 
-        @Override
-        public void start ()
-        {
-            frameTime = System.currentTimeMillis();
+    class LogicLoop extends Thread {
+        private long frameTime;
+        private BoardState board;
+
+        LogicLoop(BoardState b){
+            board = b;
         }
-    }
-}
 
-class LogicLoop extends Thread {
-    private long frameTime;
-    private BoardState board;
-
-    LogicLoop(BoardState b){
-        board = b;
-    }
-
-    public void run() {
-        long frameTimeDelta = System.currentTimeMillis() - frameTime;
-        //if (frameTimeDelta > 1000){
-            board.updateCells();
-            frameTime = System.currentTimeMillis();
-        //}
-    }
-
-    public void start ()
-    {
-        frameTime = System.currentTimeMillis();
+        public void run() {
+            while(!Thread.currentThread().isInterrupted()) {
+                long frameTimeDelta = System.currentTimeMillis() - frameTime;
+                if (frameTimeDelta > 500){
+                    board.updateCells();
+                    frameTime = System.currentTimeMillis();
+                }
+            }
+        }
     }
 }

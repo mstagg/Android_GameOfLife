@@ -30,6 +30,21 @@
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:src="@drawable/play"
-            android:background="#00ffffff" />
+            android:background="#00ffffff"
+            android:onClick="toggleButton"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:text="   Sandbox Mode   "
+            android:gravity="center"
+            android:textSize="24dp"
+            android:textColor="#ffffff" />
+        <ImageButton
+            android:id="@+id/btn_clear"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:src="@drawable/clear"
+            android:background="#00ffffff"
+            android:onClick="clearButton"/>
     </LinearLayout>
 </LinearLayout>
