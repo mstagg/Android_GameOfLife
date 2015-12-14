@@ -1,4 +1,4 @@
-package com.example.usiandroid;
+package com.example.usiandroid.gameoflife.CustomViews;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -7,36 +7,50 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-import com.example.usiandroid.DrawingView;
-import com.example.usiandroid.gameoflife.BoardState_TheCross;
-import com.example.usiandroid.gameoflife.Cell;
+import com.example.usiandroid.gameoflife.Challenges.BoardState_TheCross;
+import com.example.usiandroid.gameoflife.Logic.BoardState;
+import com.example.usiandroid.gameoflife.Logic.Cell;
 
 /**
  * Created by matthew on 12/13/15.
  */
-public class DrawingView_TheCross extends DrawingView {
-    public DrawingView_TheCross(Context context, AttributeSet attrs) {
+
+// Custom view specifically for challenges, inherits from DrawingView
+public class DrawingView_Challenge extends DrawingView {
+
+    // Constructor
+    public DrawingView_Challenge(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init();
+    }
+
+    // Initialize all variables, objects, and settings
+    @Override
+    protected void init(){
+        // Initialize class variables and objects
         initial = true;
         paint = new Paint();
         board = new BoardState_TheCross(NUM_BLOCKS_ACROSS, NUM_BLOCKS_TALL);
+
+        // Initialize graphics and canvas variables
+        paint.setStrokeWidth(5);
+
+        // Start graphic rendering thread
         startGraphics();
     }
 
+    // Draws cells and grid to screen
     @Override
     protected void onDraw(Canvas canvas) {
-        // INIT
-        this.paint.setStrokeWidth(5);
+        canvasWidth = getWidth();
+        canvasHeight = getHeight();
+        blockHeight = canvasHeight / NUM_BLOCKS_TALL;
+        blockWidth = canvasWidth / NUM_BLOCKS_ACROSS;
 
-        this.w = getWidth();
-        this.h = getHeight();
-
-        this.blockHeight = h / NUM_BLOCKS_TALL;
-        this.blockWidth = w / NUM_BLOCKS_ACROSS;
-
+        // Clears the canvas
         canvas.drawColor(Color.WHITE);
 
-        //DRAW BLOCKS
+        // Draws blocks to canvas
         paint.setStyle(Paint.Style.FILL);
         float x = 0;
         float y = 0;
@@ -48,7 +62,7 @@ public class DrawingView_TheCross extends DrawingView {
                     this.paint.setColor(Color.rgb(0, 0, 0));
                     canvas.drawRect(x, y, x + blockWidth, y + blockHeight, paint);
                 } else if (c.isAlive()) {
-                    this.paint.setColor(Color.rgb(0, 255, 0));
+                    this.paint.setColor(Color.rgb(255, 0, 0));
                     canvas.drawRect(x, y, x + blockWidth, y + blockHeight, paint);
                 } else if(c.isVisited()){
                     this.paint.setColor(Color.rgb(210, 255, 210));
@@ -59,33 +73,35 @@ public class DrawingView_TheCross extends DrawingView {
             x += blockWidth;
         }
 
-        // DRAW GRID
+        // Draw grid to canvas
         paint.setStyle(Paint.Style.STROKE);
-        this.paint.setColor(Color.rgb(0, 0, 0));
+        this.paint.setColor(Color.rgb(50, 50, 50));
         x = 0;
         for (int i = 0; i < NUM_BLOCKS_ACROSS - 1; i++) {
             x += blockWidth;
-            canvas.drawLine(x, 0, x, h, paint);
+            canvas.drawLine(x, 0, x, canvasHeight, paint);
         }
 
         y = 0;
         for (int i = 0; i < NUM_BLOCKS_TALL - 1; i++) {
             y += blockHeight;
-            canvas.drawLine(0, y, w, y, paint);
+            canvas.drawLine(0, y, canvasWidth, y, paint);
         }
     }
 
+    // Manages screen touches
     @Override
     public boolean onTouchEvent(MotionEvent e){
         float touchX = e.getX();
         float touchY = e.getY();
 
-        int xp = (int)(touchX / (w / NUM_BLOCKS_ACROSS));
-        int yp = (int)(touchY / (h / NUM_BLOCKS_TALL));
+        // Calculate cell that touch occurred in
+        int xp = (int)(touchX / (canvasWidth / NUM_BLOCKS_ACROSS));
+        int yp = (int)(touchY / (canvasHeight / NUM_BLOCKS_TALL));
         Cell cl = board.getCellAtPos(xp, yp);
 
         switch(e.getAction()){
-            // Finger presses down on screen
+            // Finger touches screen
             case MotionEvent.ACTION_DOWN:
                 break;
             // Finger moves on screen
@@ -100,6 +116,7 @@ public class DrawingView_TheCross extends DrawingView {
                     }
                 }
                 break;
+            // Finger lifts up from screen
             case MotionEvent.ACTION_UP:
                 if(!cl.isWall()){
                     if(cl.isAlive()){
@@ -117,9 +134,6 @@ public class DrawingView_TheCross extends DrawingView {
             default:
                 return false;
         }
-
-        // Calling invalidate will cause onDraw() to execute
-        //invalidate();
         return true;
     }
 }

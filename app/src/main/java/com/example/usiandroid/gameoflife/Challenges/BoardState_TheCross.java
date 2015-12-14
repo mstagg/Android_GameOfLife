@@ -1,10 +1,16 @@
-package com.example.usiandroid.gameoflife;
+package com.example.usiandroid.gameoflife.Challenges;
+
+import com.example.usiandroid.gameoflife.Logic.BoardState;
+import com.example.usiandroid.gameoflife.Logic.Cell;
 
 /**
  * Created by matthew on 12/13/15.
  */
+
+// Class that manages board and cell state for The Cross challenge
 public class BoardState_TheCross extends BoardState {
 
+    // Constructor
     public BoardState_TheCross(int width, int height) {
         super(width, height);
 
@@ -19,6 +25,7 @@ public class BoardState_TheCross extends BoardState {
         setWallCells();
     }
 
+    // Sets cells that will become walls in a cross shape
     private void setWallCells(){
         // Top Cross
         blocks[7][0].setWall(true);
@@ -72,6 +79,7 @@ public class BoardState_TheCross extends BoardState {
         blocks[13][15].setWall(true);
         blocks[14][15].setWall(true);
 
+        // Remove wall count from total block count
         totalBlocks -= 42;
     }
 }

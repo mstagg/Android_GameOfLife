@@ -1,75 +1,93 @@
-package com.example.usiandroid;
+package com.example.usiandroid.gameoflife.CustomViews;
 
 /**
  * Created by matthew on 12/12/15.
  */
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 
-import com.example.usiandroid.gameoflife.BoardState;
-import com.example.usiandroid.gameoflife.Cell;
+import com.example.usiandroid.gameoflife.Logic.BoardState;
+import com.example.usiandroid.gameoflife.Logic.Cell;
 
+// Custom view to draw board state
 public class DrawingView extends View {
 
-    protected int w, h;
-    int debounce = 0;
-    protected float blockWidth, blockHeight;
+    protected int canvasWidth, canvasHeight;
     protected int NUM_BLOCKS_ACROSS = 15, NUM_BLOCKS_TALL = 30;
+    public int debounce = 0;
+    protected float blockWidth, blockHeight;
+    protected boolean initial;
+
     public BoardState board;
     protected Paint paint;
     protected GraphicsLoop gThread;
     private LogicLoop lThread;
-    protected boolean initial;
 
+    // Constructor
     public DrawingView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init();
+    }
+
+    // Initialize all variables, objects, and settings
+    protected void init(){
+        // Initialize class variables and objects
         initial = true;
         paint = new Paint();
         board = new BoardState(NUM_BLOCKS_ACROSS, NUM_BLOCKS_TALL);
+
+        // Initialize graphics and canvas variables
+        paint.setStrokeWidth(5);
+
+        // Start graphic rendering thread
         startGraphics();
     }
 
+    // Clears the board, sets all cells to dead
     public void clearBoard(){
         board.clearCells();
     }
 
+    // Starts graphics rendering thread at 60fps
     protected void startGraphics(){
         gThread = new GraphicsLoop();
         gThread.start();
     }
 
+    // Interrupts the logic thread, causing to to stop
     public void pauseLogic(){
         lThread.interrupt();
     }
 
+    // Restarts the logic thread
     public void startLogic(){
         lThread = new LogicLoop(board);
         lThread.start();
     }
 
+    public void killThreads(){
+        gThread.interrupt();
+        lThread.interrupt();
+    }
+
+    // Draws cells and grid to screen
     @Override
     protected void onDraw(Canvas canvas) {
-        // INIT
-        this.paint.setStrokeWidth(5);
+        canvasWidth = getWidth();
+        canvasHeight = getHeight();
+        blockHeight = canvasHeight / NUM_BLOCKS_TALL;
+        blockWidth = canvasWidth / NUM_BLOCKS_ACROSS;
 
-        this.w = getWidth();
-        this.h = getHeight();
-
-        this.blockHeight = h / NUM_BLOCKS_TALL;
-        this.blockWidth = w / NUM_BLOCKS_ACROSS;
-
+        // Clears the canvas
         canvas.drawColor(Color.WHITE);
 
-        //DRAW BLOCKS
+        // Draws blocks to canvas
         paint.setStyle(Paint.Style.FILL);
         float x = 0;
         float y = 0;
@@ -78,10 +96,10 @@ public class DrawingView extends View {
             for (int j = 0; j < NUM_BLOCKS_TALL; j++) {
                 Cell c = board.getCellAtPos(i, j);
                 if(c.isWall()){
-                    this.paint.setColor(Color.rgb(0, 0, 0));
+                    paint.setColor(Color.rgb(0, 0, 0));
                     canvas.drawRect(x, y, x + blockWidth, y + blockHeight, paint);
                 } else if (c.isAlive()) {
-                    this.paint.setColor(Color.rgb(0, 255, 0));
+                    paint.setColor(Color.rgb(0, 255, 0));
                     canvas.drawRect(x, y, x + blockWidth, y + blockHeight, paint);
                 }
                 y += blockHeight;
@@ -89,33 +107,37 @@ public class DrawingView extends View {
             x += blockWidth;
         }
 
-        // DRAW GRID
+        // Draw grid to canvas
         paint.setStyle(Paint.Style.STROKE);
-        this.paint.setColor(Color.rgb(0, 0, 0));
+        paint.setColor(Color.rgb(50, 50, 50));
+        // Horizontal lines
         x = 0;
         for (int i = 0; i < NUM_BLOCKS_ACROSS - 1; i++) {
             x += blockWidth;
-            canvas.drawLine(x, 0, x, h, paint);
+            canvas.drawLine(x, 0, x, canvasHeight, paint);
         }
-
+        // Vertical lines
         y = 0;
         for (int i = 0; i < NUM_BLOCKS_TALL - 1; i++) {
             y += blockHeight;
-            canvas.drawLine(0, y, w, y, paint);
+            canvas.drawLine(0, y, canvasWidth, y, paint);
         }
     }
 
+    // Manages screen touches
     @Override
     public boolean onTouchEvent(MotionEvent e){
         float touchX = e.getX();
         float touchY = e.getY();
 
-        int xp = (int)(touchX / (w / NUM_BLOCKS_ACROSS));
-        int yp = (int)(touchY / (h / NUM_BLOCKS_TALL));
+        // Calculate cell that touch occurred in
+        int xp = (int)(touchX / (canvasWidth / NUM_BLOCKS_ACROSS));
+        int yp = (int)(touchY / (canvasHeight / NUM_BLOCKS_TALL));
         Cell cl = board.getCellAtPos(xp, yp);
 
+        // Handle touch
         switch(e.getAction()){
-            // Finger presses down on screen
+            // Finger touches screen
             case MotionEvent.ACTION_DOWN:
                 break;
             // Finger moves on screen
@@ -127,6 +149,7 @@ public class DrawingView extends View {
                     }
                 }
                 break;
+            // Finger lifts up from screen
             case MotionEvent.ACTION_UP:
                 if(!cl.isWall()){
                     if(cl.isAlive()){
@@ -140,12 +163,11 @@ public class DrawingView extends View {
             default:
                 return false;
         }
-
-        // Calling invalidate will cause onDraw() to execute
-        //invalidate();
         return true;
     }
 
+    // Thread to draw graphics to screen
+    // Refreshes canvas at 60fps
     public class GraphicsLoop extends Thread {
         private long frameTime;
 
@@ -155,7 +177,7 @@ public class DrawingView extends View {
 
         @Override
         public void run() {
-            while(true) {
+            while(!Thread.currentThread().isInterrupted()) {
                 long frameTimeDelta = System.currentTimeMillis() - frameTime;
                 if (frameTimeDelta > 16) {
                     frameTime = System.currentTimeMillis();
@@ -165,6 +187,8 @@ public class DrawingView extends View {
         }
     }
 
+    // Thread to handle game logic
+    // Calculates current cell status once every .5 seconds
     public class LogicLoop extends Thread {
         private long frameTime;
         private BoardState board;

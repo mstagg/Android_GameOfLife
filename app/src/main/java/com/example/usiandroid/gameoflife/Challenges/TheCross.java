@@ -1,4 +1,4 @@
-package com.example.usiandroid.gameoflife;
+package com.example.usiandroid.gameoflife.Challenges;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -6,35 +6,51 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.example.usiandroid.DrawingView;
-
-import org.w3c.dom.Text;
+import com.example.usiandroid.gameoflife.CustomViews.DrawingView;
+import com.example.usiandroid.gameoflife.CustomViews.DrawingView_Challenge;
+import com.example.usiandroid.gameoflife.R;
 
 public class TheCross extends Activity {
 
     private boolean pausedState;
     private ImageButton imgBtn;
     private TextView percentView, blocksView;
-    private DrawingView drawSpace;
+    private DrawingView_Challenge drawSpace;
     private UILoop updateLoop;
 
+    // Constructor
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_the_cross);
         pausedState = true;
         imgBtn = (ImageButton)findViewById(R.id.btn_play);
-        drawSpace = (DrawingView)findViewById(R.id.drawing);
+        drawSpace = (DrawingView_Challenge)findViewById(R.id.drawing);
         percentView = (TextView)findViewById(R.id.percent);
         blocksView = (TextView)findViewById(R.id.blocks);
         updateLoop = new UILoop();
         updateLoop.start();
     }
 
-    public void clearButton(View view){
-        drawSpace.clearBoard();
+    // Destructor
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        drawSpace.killThreads();
+        updateLoop.interrupt();
     }
 
+    // Clears board and restores it to default state
+    public void clearButton(View view){
+        drawSpace.clearBoard();
+        if(!pausedState){
+            imgBtn.setImageResource(R.drawable.play);
+            drawSpace.pauseLogic();
+            pausedState = true;
+        }
+    }
+
+    // Pause/play button, also starts and stops logic thread
     public void toggleButton(View view){
         if(pausedState) {
             imgBtn.setImageResource(R.drawable.stop);
@@ -47,6 +63,7 @@ public class TheCross extends Activity {
         }
     }
 
+    // Used by thread to update UI elements along bottom of screen
     public void updateUI(){
         double percent = drawSpace.board.getPercentagePainted();
         percentView.setText(Double.toString(Math.round(percent)) + "%   ");
@@ -54,6 +71,7 @@ public class TheCross extends Activity {
         blocksView.setText("   " + Integer.toString(remaining));
     }
 
+    // Threa that updates UI elements at 60fps
     public class UILoop extends Thread {
         private long frameTime;
 

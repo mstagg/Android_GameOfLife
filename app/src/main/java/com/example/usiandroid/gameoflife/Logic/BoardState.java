@@ -1,26 +1,23 @@
-package com.example.usiandroid.gameoflife;
-
-import android.util.Log;
+package com.example.usiandroid.gameoflife.Logic;
 
 /**
  * Created by matthew on 12/13/15.
  */
 
-
-
+// Class that manages board and cell state
 public class BoardState {
 
-    protected int sizeX;
-    protected int sizeY;
+    protected int sizeX, sizeY, totalBlocks;
+    protected int totalPainted = 0, totalPlaced = 0, maxPlaced = 30;
     protected Cell[][] blocks;
-    protected int totalBlocks, totalPainted = 0, maxPlaced = 30;
-    protected int totalPlaced = 0;
 
+    // Constructor
     public BoardState(int width, int height){
         sizeX = width;
         sizeY = height;
         totalBlocks = sizeX * sizeY;
         blocks = new Cell[sizeX][sizeY];
+        // Init all cells in a dead state
         for (int x = 0; x < blocks.length; x++){
             for (int y = 0; y < blocks[x].length; y++){
                 blocks[x][y] = new Cell(false, x, y);
@@ -28,18 +25,23 @@ public class BoardState {
         }
     }
 
+    // Accessor to increment totalPlaced
     public void incTotalPlaced(){
         totalPlaced++;
     }
 
+    // Accessor to decrement totalPlaced
     public void decTotalPlaced(){
         totalPlaced--;
     }
 
+    // Finds and returns the cell located at (x, y)
+    // x and y are NOT screen coordinates, they are the index of the cell in blocks[][]
     public Cell getCellAtPos(int x, int y){
         return blocks[x][y];
     }
 
+    // Updates the state of each cell on the grid
     public void updateCells(){
         for (int x = 0; x < blocks.length; x++){
             for (int y = 0; y < blocks[x].length; y++){
@@ -62,6 +64,7 @@ public class BoardState {
         }
     }
 
+    // Clears all cells and resets variables to default states
     public void clearCells(){
         for (int x = 0; x < blocks.length; x++) {
             for (int y = 0; y < blocks[x].length; y++) {
@@ -74,14 +77,19 @@ public class BoardState {
         }
     }
 
+    // Returns the remaining amount of blocks the user can place
+    // only used by challenge modes
     public int getRemainingBlocks(){
         return maxPlaced - totalPlaced;
     }
 
+    // Returns the percentage of blocks that have been visited
+    // only used by challenge modes
     public double getPercentagePainted(){
         return ((double)totalPainted / (double)totalBlocks) * 100.0;
     }
 
+    // Returns the number of cells adjacent and diagonal to Cell c that are alive
     private int getNumberOfNeighbors(Cell c){
         int x = c.getxPos();
         int y = c.getyPos();

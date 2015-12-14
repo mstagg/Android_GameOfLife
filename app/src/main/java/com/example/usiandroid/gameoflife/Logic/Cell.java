@@ -1,36 +1,40 @@
-package com.example.usiandroid.gameoflife;
+package com.example.usiandroid.gameoflife.Logic;
 
 /**
  * Created by matthew on 12/13/15.
  */
 
+
+// Class to store and manages cells on the board
 public class Cell{
 
-    private boolean alive;
-    private boolean visited;
-    private boolean isWall;
+    private boolean alive, visited, wall;
     private int xPos, yPos; // Position of cell in grid, NOT SIZE OF CELL OR POSITION ON CANVAS
 
+    // Constructor
     public Cell(boolean wall, int x, int y){
         xPos = x;
         yPos = y;
         alive = false;
         visited = false;
         if(wall){
-            isWall = true;
+            this.wall = true;
         } else {
-            isWall = false;
+            this.wall = false;
         }
     }
 
+    // Accessor for xPos
     public int getxPos(){
         return this.xPos;
     }
 
+    // Accesor for yPos
     public int getyPos(){
         return this.yPos;
     }
 
+    // Setter function for alive state
     public void setAlive(boolean b){
         if(b){
             this.alive = true;
@@ -39,6 +43,7 @@ public class Cell{
         }
     }
 
+    // Getter function for alive state
     public boolean isAlive(){
         if(this.alive){
             return true;
@@ -47,22 +52,25 @@ public class Cell{
         }
     }
 
+    // Setter function for wall state
     public void setWall(boolean b){
         if(b){
-            this.isWall = true;
+            this.wall = true;
         } else{
-            this.isWall = false;
+            this.wall = false;
         }
     }
 
+    // Getter function for wall state
     public boolean isWall(){
-        if(this.isWall){
+        if(this.wall){
             return true;
         } else{
             return false;
         }
     }
 
+    // Setter function for visited state
     public void setVisited(boolean b){
         if(b){
             this.visited = true;
@@ -71,6 +79,7 @@ public class Cell{
         }
     }
 
+    // Getter function for visited state
     public boolean isVisited(){
         if(this.visited){
             return true;

@@ -19,8 +19,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".SandBox" />
-        <activity android:name=".ChallengeMenu" />
-        <activity android:name=".TheCross"></activity>
+        <activity android:name=".Challenges.ChallengeMenu" />
+        <activity android:name=".Challenges.TheCross"></activity>
     </application>
 
 </manifest>

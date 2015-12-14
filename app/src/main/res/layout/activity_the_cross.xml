@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:context=".MainActivity" >
 
-    <com.example.usiandroid.DrawingView_TheCross
+    <com.example.usiandroid.gameoflife.CustomViews.DrawingView_Challenge
         android:id="@+id/drawing"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
