@@ -8,7 +8,7 @@ package com.example.usiandroid.gameoflife.Logic;
 // Class to store and manages cells on the board
 public class Cell{
 
-    private boolean alive, visited, wall;
+    private boolean alive, visited, wall, readyToLive, readyToDie;
     private int xPos, yPos; // Position of cell in grid, NOT SIZE OF CELL OR POSITION ON CANVAS
 
     // Constructor
@@ -17,6 +17,9 @@ public class Cell{
         yPos = y;
         alive = false;
         visited = false;
+        readyToDie = false;
+        readyToLive = false;
+
         if(wall){
             this.wall = true;
         } else {
@@ -86,5 +89,47 @@ public class Cell{
         } else{
             return false;
         }
+    }
+
+    // Marks cell for birth
+    public void prepareToLive(){
+        readyToLive = true;
+    }
+
+    // Marks cell for death
+    public void prepareToDie(){
+        readyToDie = true;
+    }
+
+    // Getter function for isReadyToLive
+    public boolean isReadyToLive(){
+        if(this.readyToLive){
+            return true;
+        } else{
+            return false;
+        }
+    }
+
+    // Getter function for isReadyToDie
+    public boolean isReadyToDie(){
+        if(this.readyToDie){
+            return true;
+        } else{
+            return false;
+        }
+    }
+
+    // Births cell and resets live/die status
+    public void live(){
+        setAlive(true);
+        readyToLive = false;
+        readyToDie = false;
+    }
+
+    // Births cell and resets live/die status
+    public void die(){
+        setAlive(false);
+        readyToLive = false;
+        readyToDie = false;
     }
 }

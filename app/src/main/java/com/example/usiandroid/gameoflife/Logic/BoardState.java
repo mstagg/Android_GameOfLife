@@ -1,5 +1,7 @@
 package com.example.usiandroid.gameoflife.Logic;
 
+import android.util.Log;
+
 /**
  * Created by matthew on 12/13/15.
  */
@@ -54,11 +56,21 @@ public class BoardState {
                         current.setVisited(true);
                     }
                     int numNeighbors = getNumberOfNeighbors(current);
-                    if (numNeighbors < 2 || numNeighbors > 3) {
-                        current.setAlive(false);
-                    } else if (numNeighbors == 3) {
-                        current.setAlive(true);
+                    if (numNeighbors == 3) {
+                        current.prepareToLive();
+                    } else if (numNeighbors < 2 || numNeighbors > 3) {
+                        current.prepareToDie();
                     }
+                }
+            }
+        }
+        for (int x = 0; x < blocks.length; x++){
+            for (int y = 0; y < blocks[x].length; y++) {
+                Cell current = blocks[x][y];
+                if(current.isReadyToLive()){
+                    current.live();
+                } else if(current.isReadyToDie()){
+                    current.die();
                 }
             }
         }
