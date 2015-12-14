@@ -10,19 +10,30 @@ import android.util.Log;
 
 public class BoardState {
 
-    private int sizeX;
-    private int sizeY;
-    private Cell[][] blocks;
+    protected int sizeX;
+    protected int sizeY;
+    protected Cell[][] blocks;
+    protected int totalBlocks, totalPainted = 0, maxPlaced = 30;
+    protected int totalPlaced = 0;
 
     public BoardState(int width, int height){
         sizeX = width;
         sizeY = height;
+        totalBlocks = sizeX * sizeY;
         blocks = new Cell[sizeX][sizeY];
         for (int x = 0; x < blocks.length; x++){
             for (int y = 0; y < blocks[x].length; y++){
                 blocks[x][y] = new Cell(false, x, y);
             }
         }
+    }
+
+    public void incTotalPlaced(){
+        totalPlaced++;
+    }
+
+    public void decTotalPlaced(){
+        totalPlaced--;
     }
 
     public Cell getCellAtPos(int x, int y){
@@ -33,11 +44,19 @@ public class BoardState {
         for (int x = 0; x < blocks.length; x++){
             for (int y = 0; y < blocks[x].length; y++){
                 Cell current = blocks[x][y];
-                int numNeighbors = getNumberOfNeighbors(current);
-                if(numNeighbors < 2 || numNeighbors > 3){
-                    current.setAlive(false);
-                } else if(numNeighbors == 3){
-                    current.setAlive(true);
+                if(!current.isWall()) {
+                    if(current.isAlive()){
+                        if(!current.isVisited()){
+                            totalPainted++;
+                        }
+                        current.setVisited(true);
+                    }
+                    int numNeighbors = getNumberOfNeighbors(current);
+                    if (numNeighbors < 2 || numNeighbors > 3) {
+                        current.setAlive(false);
+                    } else if (numNeighbors == 3) {
+                        current.setAlive(true);
+                    }
                 }
             }
         }
@@ -48,8 +67,19 @@ public class BoardState {
             for (int y = 0; y < blocks[x].length; y++) {
                 Cell current = blocks[x][y];
                 current.setAlive(false);
+                current.setVisited(false);
+                totalPainted = 0;
+                totalPlaced = 0;
             }
         }
+    }
+
+    public int getRemainingBlocks(){
+        return maxPlaced - totalPlaced;
+    }
+
+    public double getPercentagePainted(){
+        return ((double)totalPainted / (double)totalBlocks) * 100.0;
     }
 
     private int getNumberOfNeighbors(Cell c){

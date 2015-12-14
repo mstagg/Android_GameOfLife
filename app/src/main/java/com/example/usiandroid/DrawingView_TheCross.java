@@ -1,59 +1,26 @@
 package com.example.usiandroid;
 
-/**
- * Created by matthew on 12/12/15.
- */
-
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.View;
-import android.view.Window;
 
-import com.example.usiandroid.gameoflife.BoardState;
+import com.example.usiandroid.DrawingView;
+import com.example.usiandroid.gameoflife.BoardState_TheCross;
 import com.example.usiandroid.gameoflife.Cell;
 
-public class DrawingView extends View {
-
-    protected int w, h;
-    int debounce = 0;
-    protected float blockWidth, blockHeight;
-    protected int NUM_BLOCKS_ACROSS = 15, NUM_BLOCKS_TALL = 30;
-    public BoardState board;
-    protected Paint paint;
-    protected GraphicsLoop gThread;
-    private LogicLoop lThread;
-    protected boolean initial;
-
-    public DrawingView(Context context, AttributeSet attrs) {
+/**
+ * Created by matthew on 12/13/15.
+ */
+public class DrawingView_TheCross extends DrawingView {
+    public DrawingView_TheCross(Context context, AttributeSet attrs) {
         super(context, attrs);
         initial = true;
         paint = new Paint();
-        board = new BoardState(NUM_BLOCKS_ACROSS, NUM_BLOCKS_TALL);
+        board = new BoardState_TheCross(NUM_BLOCKS_ACROSS, NUM_BLOCKS_TALL);
         startGraphics();
-    }
-
-    public void clearBoard(){
-        board.clearCells();
-    }
-
-    protected void startGraphics(){
-        gThread = new GraphicsLoop();
-        gThread.start();
-    }
-
-    public void pauseLogic(){
-        lThread.interrupt();
-    }
-
-    public void startLogic(){
-        lThread = new LogicLoop(board);
-        lThread.start();
     }
 
     @Override
@@ -82,6 +49,9 @@ public class DrawingView extends View {
                     canvas.drawRect(x, y, x + blockWidth, y + blockHeight, paint);
                 } else if (c.isAlive()) {
                     this.paint.setColor(Color.rgb(0, 255, 0));
+                    canvas.drawRect(x, y, x + blockWidth, y + blockHeight, paint);
+                } else if(c.isVisited()){
+                    this.paint.setColor(Color.rgb(210, 255, 210));
                     canvas.drawRect(x, y, x + blockWidth, y + blockHeight, paint);
                 }
                 y += blockHeight;
@@ -123,7 +93,10 @@ public class DrawingView extends View {
                 debounce++;
                 if(debounce > 10) {
                     if (!cl.isWall() && !cl.isAlive()) {
-                        cl.setAlive(true);
+                        if(board.getRemainingBlocks() > 0) {
+                            cl.setAlive(true);
+                            board.incTotalPlaced();
+                        }
                     }
                 }
                 break;
@@ -131,8 +104,12 @@ public class DrawingView extends View {
                 if(!cl.isWall()){
                     if(cl.isAlive()){
                         cl.setAlive(false);
+                        board.decTotalPlaced();
                     }else {
-                        cl.setAlive(true);
+                        if(board.getRemainingBlocks() > 0) {
+                            cl.setAlive(true);
+                            board.incTotalPlaced();
+                        }
                     }
                     debounce = 0;
                 }
@@ -144,43 +121,5 @@ public class DrawingView extends View {
         // Calling invalidate will cause onDraw() to execute
         //invalidate();
         return true;
-    }
-
-    public class GraphicsLoop extends Thread {
-        private long frameTime;
-
-        GraphicsLoop(){
-            frameTime = System.currentTimeMillis();
-        }
-
-        @Override
-        public void run() {
-            while(true) {
-                long frameTimeDelta = System.currentTimeMillis() - frameTime;
-                if (frameTimeDelta > 16) {
-                    frameTime = System.currentTimeMillis();
-                    postInvalidate();
-                }
-            }
-        }
-    }
-
-    public class LogicLoop extends Thread {
-        private long frameTime;
-        private BoardState board;
-
-        LogicLoop(BoardState b){
-            board = b;
-        }
-
-        public void run() {
-            while(!Thread.currentThread().isInterrupted()) {
-                long frameTimeDelta = System.currentTimeMillis() - frameTime;
-                if (frameTimeDelta > 500){
-                    board.updateCells();
-                    frameTime = System.currentTimeMillis();
-                }
-            }
-        }
     }
 }

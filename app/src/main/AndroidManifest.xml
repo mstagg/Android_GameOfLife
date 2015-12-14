@@ -18,7 +18,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SandBox"></activity>
+        <activity android:name=".SandBox" />
+        <activity android:name=".ChallengeMenu" />
+        <activity android:name=".TheCross"></activity>
     </application>
 
 </manifest>

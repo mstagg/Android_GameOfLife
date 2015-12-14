@@ -46,4 +46,36 @@ public class Cell{
             return false;
         }
     }
+
+    public void setWall(boolean b){
+        if(b){
+            this.isWall = true;
+        } else{
+            this.isWall = false;
+        }
+    }
+
+    public boolean isWall(){
+        if(this.isWall){
+            return true;
+        } else{
+            return false;
+        }
+    }
+
+    public void setVisited(boolean b){
+        if(b){
+            this.visited = true;
+        } else{
+            this.visited = false;
+        }
+    }
+
+    public boolean isVisited(){
+        if(this.visited){
+            return true;
+        } else{
+            return false;
+        }
+    }
 }

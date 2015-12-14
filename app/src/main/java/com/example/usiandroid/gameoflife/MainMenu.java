@@ -14,9 +14,14 @@ public class MainMenu extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
     }
 
-    public void moveSandbox(View view){
-        Intent secondActivity = new Intent(this, SandBox.class);
-        startActivity(secondActivity);
+    public void gotoSandbox(View view){
+        Intent s = new Intent(this, SandBox.class);
+        startActivity(s);
+    }
+
+    public void gotoChallenges(View view){
+        Intent c = new Intent(this, ChallengeMenu.class);
+        startActivity(c);
     }
 
 }

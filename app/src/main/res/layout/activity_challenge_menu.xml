@@ -11,7 +11,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="John Conway&apos;s Game of Life"
+        android:text="Challenges"
         android:textAlignment="center"
         android:id="@+id/textView"
         android:layout_gravity="center_horizontal"
@@ -22,30 +22,49 @@
         style="@style/MainMenuBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Sandbox Mode"
-        android:id="@+id/btn_sandbox"
+        android:text="The Cross"
+        android:id="@+id/challenge1"
         android:layout_gravity="center_horizontal"
         android:textColor="#ffffff"
         android:textSize="30dp"
         android:background="#489600"
-        android:onClick="gotoSandbox"/>
+        android:onClick="gotoTheCross"/>
     <Button
         style="@style/MainMenuBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Challenge Mode"
-        android:id="@+id/btn_challenge"
+        android:text="Challenge 2"
+        android:id="@+id/challenge2"
         android:layout_gravity="center_horizontal"
         android:textColor="#ffffff"
         android:textSize="30dp"
-        android:background="#489600"
-        android:onClick="gotoChallenges"/>
+        android:background="#489600" />
     <Button
         style="@style/MainMenuBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Settings"
-        android:id="@+id/btn_settings"
+        android:text="Challenge 3"
+        android:id="@+id/challenge3"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#ffffff"
+        android:textSize="30dp"
+        android:background="#489600" />
+    <Button
+        style="@style/MainMenuBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Challenge 4"
+        android:id="@+id/challenge4"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#ffffff"
+        android:textSize="30dp"
+        android:background="#489600" />
+    <Button
+        style="@style/MainMenuBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Challenge 5"
+        android:id="@+id/challenge5"
         android:layout_gravity="center_horizontal"
         android:textColor="#ffffff"
         android:textSize="30dp"
