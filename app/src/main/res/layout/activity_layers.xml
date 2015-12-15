@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:context=".MainActivity" >
 
-    <com.example.usiandroid.gameoflife.CustomViews.DrawingView_The_Cross
+    <com.example.usiandroid.gameoflife.CustomViews.DrawingView_Layers
         android:id="@+id/drawing"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
@@ -43,7 +43,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:text="   The Cross   "
+            android:text="   Layers   "
             android:gravity="center"
             android:textSize="24dp"
             android:textColor="#ffffff" />

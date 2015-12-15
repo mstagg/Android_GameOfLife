@@ -7,8 +7,7 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-import com.example.usiandroid.gameoflife.Challenges.BoardState_TheCross;
-import com.example.usiandroid.gameoflife.Logic.BoardState;
+import com.example.usiandroid.gameoflife.Logic.BoardState_TheCross;
 import com.example.usiandroid.gameoflife.Logic.Cell;
 
 /**
@@ -21,22 +20,6 @@ public class DrawingView_Challenge extends DrawingView {
     // Constructor
     public DrawingView_Challenge(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
-    }
-
-    // Initialize all variables, objects, and settings
-    @Override
-    protected void init(){
-        // Initialize class variables and objects
-        initial = true;
-        paint = new Paint();
-        board = new BoardState_TheCross(NUM_BLOCKS_ACROSS, NUM_BLOCKS_TALL);
-
-        // Initialize graphics and canvas variables
-        paint.setStrokeWidth(5);
-
-        // Start graphic rendering thread
-        startGraphics();
     }
 
     // Draws cells and grid to screen

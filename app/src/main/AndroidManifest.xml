@@ -20,7 +20,11 @@
         </activity>
         <activity android:name=".SandBox" />
         <activity android:name=".Challenges.ChallengeMenu" />
-        <activity android:name=".Challenges.TheCross"></activity>
+        <activity android:name=".Challenges.TheCross" />
+        <activity android:name=".Challenges.Yandroid" />
+        <activity android:name=".Challenges.Layers" />
+        <activity android:name=".Challenges.HalfHalf" />
+        <activity android:name=".Challenges.Chevron"></activity>
     </application>
 
 </manifest>

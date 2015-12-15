@@ -72,8 +72,12 @@ public class DrawingView extends View {
     }
 
     public void killThreads(){
-        gThread.interrupt();
-        lThread.interrupt();
+        if(gThread != null) {
+            gThread.interrupt();
+        }
+        if(lThread != null) {
+            lThread.interrupt();
+        }
     }
 
     // Draws cells and grid to screen

@@ -1,4 +1,4 @@
-package com.example.usiandroid.gameoflife.Challenges;
+package com.example.usiandroid.gameoflife.Logic;
 
 import com.example.usiandroid.gameoflife.Logic.BoardState;
 import com.example.usiandroid.gameoflife.Logic.Cell;

@@ -6,11 +6,10 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-
 import com.example.usiandroid.gameoflife.CustomViews.DrawingView_Challenge;
 import com.example.usiandroid.gameoflife.R;
 
-public class TheCross extends Activity {
+public class Yandroid extends Activity {
 
     private boolean pausedState;
     private ImageButton imgBtn;
@@ -22,7 +21,7 @@ public class TheCross extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_the_cross);
+        setContentView(R.layout.activity_yandroid);
         pausedState = true;
         imgBtn = (ImageButton)findViewById(R.id.btn_play);
         drawSpace = (DrawingView_Challenge)findViewById(R.id.drawing);

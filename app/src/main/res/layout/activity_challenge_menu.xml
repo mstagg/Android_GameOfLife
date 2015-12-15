@@ -33,40 +33,44 @@
         style="@style/MainMenuBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Challenge 2"
+        android:text="Yandroid"
         android:id="@+id/challenge2"
         android:layout_gravity="center_horizontal"
         android:textColor="#ffffff"
         android:textSize="30dp"
-        android:background="#489600" />
+        android:background="#489600"
+        android:onClick="gotoYandroid"/>
     <Button
         style="@style/MainMenuBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Challenge 3"
+        android:text="Layers"
         android:id="@+id/challenge3"
         android:layout_gravity="center_horizontal"
         android:textColor="#ffffff"
         android:textSize="30dp"
-        android:background="#489600" />
+        android:background="#489600"
+        android:onClick="gotoLayers"/>
     <Button
         style="@style/MainMenuBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Challenge 4"
+        android:text="Half and Half"
         android:id="@+id/challenge4"
         android:layout_gravity="center_horizontal"
         android:textColor="#ffffff"
         android:textSize="30dp"
-        android:background="#489600" />
+        android:background="#489600"
+        android:onClick="gotoHalfHalf"/>
     <Button
         style="@style/MainMenuBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Challenge 5"
+        android:text="Chevron"
         android:id="@+id/challenge5"
         android:layout_gravity="center_horizontal"
         android:textColor="#ffffff"
         android:textSize="30dp"
-        android:background="#489600" />
+        android:background="#489600"
+        android:onClick="gotoChevron"/>
 </LinearLayout>
