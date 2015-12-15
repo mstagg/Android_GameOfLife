@@ -102,11 +102,11 @@ public class DrawingView_Challenge extends DrawingView {
             // Finger lifts up from screen
             case MotionEvent.ACTION_UP:
                 if(!cl.isWall()){
-                    if(cl.isAlive()){
+                    if(cl.isAlive() && initial){
                         cl.setAlive(false);
                         board.decTotalPlaced();
                     }else {
-                        if(board.getRemainingBlocks() > 0) {
+                        if(board.getRemainingBlocks() > 0 && !cl.isAlive()) {
                             cl.setAlive(true);
                             board.incTotalPlaced();
                         }

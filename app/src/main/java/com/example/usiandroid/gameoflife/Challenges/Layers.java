@@ -7,10 +7,12 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.usiandroid.gameoflife.CustomViews.DrawingView_Challenge;
+import com.example.usiandroid.gameoflife.Logic.MusicManager;
 import com.example.usiandroid.gameoflife.R;
 
 public class Layers extends Activity {
 
+    boolean continueBGMusic;
     private boolean pausedState;
     private ImageButton imgBtn;
     private TextView percentView, blocksView;
@@ -31,6 +33,20 @@ public class Layers extends Activity {
         updateLoop.start();
     }
 
+    @Override
+    public void onPause(){
+        super.onPause();
+        if(!continueBGMusic){
+            MusicManager.pause();
+        }
+    }
+
+    public void onResume(){
+        super.onResume();
+        continueBGMusic = false;
+        MusicManager.start(this, R.raw.synth);
+    }
+
     // Destructor
     @Override
     protected void onDestroy(){
@@ -42,6 +58,7 @@ public class Layers extends Activity {
     // Clears board and restores it to default state
     public void clearButton(View view){
         drawSpace.clearBoard();
+        drawSpace.setInitial(true);
         if(!pausedState){
             imgBtn.setImageResource(R.drawable.play);
             drawSpace.pauseLogic();
@@ -51,6 +68,7 @@ public class Layers extends Activity {
 
     // Pause/play button, also starts and stops logic thread
     public void toggleButton(View view){
+        drawSpace.setInitial(false);
         if(pausedState) {
             imgBtn.setImageResource(R.drawable.stop);
             drawSpace.startLogic();

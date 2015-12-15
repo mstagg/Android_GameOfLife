@@ -44,10 +44,11 @@
         style="@style/MainMenuBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Settings"
+        android:text="Learn More"
         android:id="@+id/btn_settings"
         android:layout_gravity="center_horizontal"
         android:textColor="#ffffff"
         android:textSize="30dp"
-        android:background="#489600" />
+        android:background="#489600"
+        android:onClick="gotoLearnMore"/>
 </LinearLayout>

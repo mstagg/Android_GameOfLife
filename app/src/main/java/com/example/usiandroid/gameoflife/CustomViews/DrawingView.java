@@ -49,6 +49,14 @@ public class DrawingView extends View {
         startGraphics();
     }
 
+    public void setInitial(boolean b){
+        if(b){
+            initial = true;
+        } else{
+            initial = false;
+        }
+    }
+
     // Clears the board, sets all cells to dead
     public void clearBoard(){
         board.clearCells();

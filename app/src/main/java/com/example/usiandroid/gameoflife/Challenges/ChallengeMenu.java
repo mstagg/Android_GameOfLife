@@ -5,15 +5,32 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.usiandroid.gameoflife.Logic.MusicManager;
 import com.example.usiandroid.gameoflife.R;
 
 public class ChallengeMenu extends Activity {
+
+    boolean continueBGMusic;
 
     // Constructor
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_challenge_menu);
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        if(!continueBGMusic){
+            MusicManager.pause();
+        }
+    }
+
+    public void onResume(){
+        super.onResume();
+        continueBGMusic = false;
+        MusicManager.start(this, R.raw.synth);
     }
 
     // Starts The Cross challenge activity

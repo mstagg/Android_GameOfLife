@@ -6,10 +6,12 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import com.example.usiandroid.gameoflife.CustomViews.DrawingView;
+import com.example.usiandroid.gameoflife.Logic.MusicManager;
 
 // Sandbox mode activity
 public class SandBox extends Activity {
 
+    boolean continueBGMusic;
     private boolean pausedState;
     private ImageButton imgBtn;
     private DrawingView drawSpace;
@@ -22,6 +24,20 @@ public class SandBox extends Activity {
         pausedState = true;
         imgBtn = (ImageButton)findViewById(R.id.btn_play);
         drawSpace = (DrawingView)findViewById(R.id.drawing);
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        if(!continueBGMusic){
+            MusicManager.pause();
+        }
+    }
+
+    public void onResume(){
+        super.onResume();
+        continueBGMusic = false;
+        MusicManager.start(this, R.raw.synth);
     }
 
     // Destructor
